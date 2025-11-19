@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter,Routes,Route } from "react-router-dom";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
+import { Toaster } from "react-hot-toast";
+import ProtectedRoute from "./components/protectedRoutes";
+import Loader from "./components/loader";
+import { useSelector } from "react-redux";
+import Profile from "./pages/profile";
+
 
 function App() {
+  const { loader } = useSelector(state => state.loaderReducer)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Toaster position="top-center" reverseOrder={false} />
+      { loader && <Loader />}
+      <BrowserRouter>
+      <Routes>
+        <Route path ="/" element ={
+          <ProtectedRoute>
+          <Home />
+          </ProtectedRoute>  }>
+          </Route>
+
+          <Route path ="/profile" element ={
+          <ProtectedRoute>
+          <Profile />
+          </ProtectedRoute>  }>
+          </Route>
+        <Route path ="/login" element ={<Login /> }></Route>
+        <Route path ="/signup" element ={<Signup /> }></Route>
+      </Routes>
+      </BrowserRouter>
     </div>
   );
 }
